@@ -1,26 +1,64 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import Counters from "./components/counters";
+import Nav from "./components/nav";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  state = {
+    counters: [
+      { id: 1, value: 6 },
+      { id: 2, value: 5 },
+      { id: 3, value: 2 },
+    ],
+  };
+  deletei = (counter) => {
+    const counters = this.state.counters.filter((c) => c.id !== counter.id);
+    this.setState({ counters });
+  };
+  reset = () => {
+    const counters = this.state.counters;
+    counters.map((x) => (x.value = 0));
+    this.setState({ counters });
+  };
+  dcr = (counter) => {
+    const counters = this.state.counters;
+    counters[
+      counters
+        .map(function (e) {
+          return e.id;
+        })
+        .indexOf(counter.id)
+    ].value--;
+    this.setState({ counters });
+    /*console.log(counters);
+    this.setState({ counters });*/
+  };
+  icr = (counter) => {
+    const counters = this.state.counters;
+    counters[
+      counters
+        .map(function (e) {
+          return e.id;
+        })
+        .indexOf(counter.id)
+    ].value++;
+    this.setState({ counters });
+  };
+  render() {
+    return (
+      <React.Fragment>
+        <Nav
+          total={this.state.counters.filter((c) => c.value > 0).length}
+        ></Nav>
+        <Counters
+          counters={this.state.counters}
+          handledelete={this.deletei}
+          onreset={this.reset}
+          oninc={this.icr}
+          ondnc={this.dcr}
+        ></Counters>
+      </React.Fragment>
+    );
+  }
 }
 
 export default App;
